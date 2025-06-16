@@ -86,7 +86,6 @@
 
 ```bash
 git clone https://github.com/21f3002527/Modern-Application-Development-1.git
-cd quiz-master
 ```
 
 2. Create a virtual environment and activate:
