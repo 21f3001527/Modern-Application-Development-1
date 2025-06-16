@@ -85,7 +85,7 @@
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/21f3002527/quiz-master.git
+git clone https://github.com/21f3002527/Modern-Application-Development-1.git
 cd quiz-master
 ```
 
