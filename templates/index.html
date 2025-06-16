@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to Quiz Master{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12 text-center mb-5">
+        <h1 class="display-4">Welcome to Quiz Master</h1>
+        <p class="lead">Test your knowledge with our interactive quizzes!</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card quiz-card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-book-open fa-4x text-primary mb-3"></i>
+                <h3 class="card-title">Learn</h3>
+                <p class="card-text">Access quizzes on various subjects and chapters to enhance your knowledge.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card quiz-card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-clipboard-check fa-4x text-success mb-3"></i>
+                <h3 class="card-title">Test</h3>
+                <p class="card-text">Take quizzes to test your understanding and track your progress.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card quiz-card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-chart-line fa-4x text-danger mb-3"></i>
+                <h3 class="card-title">Improve</h3>
+                <p class="card-text">Review your results and focus on areas that need improvement.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-12 text-center">
+        {% if session.get('admin') %}
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-primary btn-lg">Go to Admin Dashboard</a>
+        {% else %}
+            <a href="{{ url_for('admin_login') }}" class="btn btn-success btn-lg me-3">Admin Login</a>
+            <a href="{{ url_for('user_login') }}" class="btn btn-primary btn-lg ms-3">User Login</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

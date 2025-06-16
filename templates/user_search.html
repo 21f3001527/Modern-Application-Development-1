@@ -1,0 +1,84 @@
+<!-- user_search.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Search</h2>
+    
+    <form action="{{ url_for('user_search') }}" method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search for subjects, chapters, quizzes..." value="{{ search_query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+    
+    {% if search_query %}
+    <h3>Results for "{{ search_query }}"</h3>
+    
+    {% if subjects or chapters or quizzes %}
+    
+    {% if subjects %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5>Subjects</h5>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                {% for subject in subjects %}
+                <div class="list-group-item">
+                    <h5 class="mb-1">{{ subject.name }}</h5>
+                    <p class="mb-1">{{ subject.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if chapters %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5>Chapters</h5>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                {% for chapter in chapters %}
+                <div class="list-group-item">
+                    <h5 class="mb-1">{{ chapter.name }}</h5>
+                    <p class="mb-1">{{ chapter.description }}</p>
+                    <small class="text-muted">Subject: {{ chapter.subject.name }}</small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if quizzes %}
+    <div class="card">
+        <div class="card-header">
+            <h5>Quizzes</h5>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                {% for quiz in quizzes %}
+                <div class="list-group-item">
+                    <h5 class="mb-1">{{ quiz.title }}</h5>
+                    <small class="text-muted">Chapter: {{ quiz.chapter.name }}</small>
+                    <small class="text-muted d-block">Subject: {{ quiz.chapter.subject.name }}</small>
+                    <small class="text-muted d-block">Date: {{ quiz.date_of_quiz.strftime('%d %B, %Y') }}</small>
+                    <a href="{{ url_for('take_quiz', quiz_id=quiz.id) }}" class="btn btn-sm btn-primary mt-2">Take Quiz</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <div class="alert alert-info">
+        No results found for "{{ search_query }}". Try a different search term.
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

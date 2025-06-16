@@ -1,0 +1,21 @@
+<!-- templates/add_chapter.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Add Chapter to {{ subject.name }}</h2>
+    
+    <form method="POST">
+        <div class="mb-3">
+            <label for="name" class="form-label">Chapter Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Add Chapter</button>
+        <a href="{{ url_for('admin_chapters', subject_id=subject.id) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

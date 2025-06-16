@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Attempt Quiz - {{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Attempt Quiz: {{ quiz.title }}</h1>
+    <form method="POST">
+        {% for idx, question in enumerate(quiz.questions) %}
+        <div class="form-group">
+            <h3>{{ idx + 1 }}. {{ question.text }}</h3>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="question_{{ idx + 1 }}" value="1" required>
+                <label class="form-check-label">{{ question.option_1 }}</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="question_{{ idx + 1 }}" value="2">
+                <label class="form-check-label">{{ question.option_2 }}</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="question_{{ idx + 1 }}" value="3">
+                <label class="form-check-label">{{ question.option_3 }}</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="question_{{ idx + 1 }}" value="4">
+                <label class="form-check-label">{{ question.option_4 }}</label>
+            </div>
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary mt-3">Submit Answers</button>
+    </form>
+</div>
+{% endblock %}

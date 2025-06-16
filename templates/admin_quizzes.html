@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Quizzes for {{ chapter.name }}</h2>
+    <a href="{{ url_for('add_quiz', chapter_id=chapter.id) }}" class="btn btn-primary mb-3">Add Quiz</a>
+    
+    {% if quizzes %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Duration</th>
+                <th>Remarks</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz in quizzes %}
+            <tr>
+                <td>{{ quiz.title }}</td>
+                <td>{{ quiz.date_of_quiz }}</td>
+                <td>{{ quiz.time_duration }} mins</td>
+                <td>{{ quiz.remarks }}</td>
+                <td>
+                    <a href="{{ url_for('edit_quiz', quiz_id=quiz.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{{ url_for('delete_quiz', quiz_id=quiz.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
+                    <a href="{{ url_for('admin_questions', quiz_id=quiz.id) }}" class="btn btn-info btn-sm">View Questions</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No quizzes found for this chapter.</p>
+    {% endif %}
+</div>
+{% endblock %}

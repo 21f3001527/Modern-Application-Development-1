@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Add Quiz for {{ chapter.name }}</h2>
+    
+    <form method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">Quiz Title</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="date_of_quiz" class="form-label">Quiz Date</label>
+            <input type="date" class="form-control" id="date_of_quiz" name="date_of_quiz" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="time_duration" class="form-label">Time Duration (minutes)</label>
+            <input type="number" class="form-control" id="time_duration" name="time_duration" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="remarks" class="form-label">Remarks</label>
+            <textarea class="form-control" id="remarks" name="remarks"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success">Add Quiz</button>
+        <a href="{{ url_for('admin_quizzes', chapter_id=chapter.id) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

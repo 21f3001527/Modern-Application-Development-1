@@ -1,0 +1,19 @@
+<!-- admin_subjects.html -->
+{% extends 'base.html' %}
+{% block title %}Manage Subjects{% endblock %}
+{% block content %}
+<h2>Subjects</h2>
+<a href="/admin/subjects/add" class="btn btn-success">Add Subject</a>
+<ul class="list-group mt-3">
+    {% for subject in subjects %}
+        <li class="list-group-item d-flex justify-content-between">
+            {{ subject.name }}
+            <div>
+                <a href="/admin/chapters/{{ subject.id }}" class="btn btn-sm btn-info">View Chapters</a>
+                <a href="/admin/subjects/edit/{{ subject.id }}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="/admin/subjects/delete/{{ subject.id }}" class="btn btn-sm btn-danger">Delete</a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

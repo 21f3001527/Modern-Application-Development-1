@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Summary{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Admin Dashboard Summary</h1>
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card text-center bg-primary text-white mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <h2 class="card-text">{{ total_users }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-success text-white mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Subjects</h5>
+                    <h2 class="card-text">{{ total_subjects }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-info text-white mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Chapters</h5>
+                    <h2 class="card-text">{{ total_chapters }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-warning text-white mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Quizzes</h5>
+                    <h2 class="card-text">{{ total_quizzes }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Quizzes per Subject</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="quizPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Chapters per Subject</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="chapterBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Recent Users</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Qualification</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in recent_users %}
+                            <tr>
+                                <td>{{ user.fullname }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.qualification }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Recent Quiz Attempts</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_scores %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Quiz</th>
+                                <th>Score</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for score in recent_scores %}
+                            <tr>
+                                <td>{{ score.user.fullname }}</td>
+                                <td>{{ score.quiz.title }}</td>
+                                <td>{{ score.total_scored }}</td>
+                                <td>{{ score.time_stamp_of_attempt.strftime('%Y-%m-%d %H:%M') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">No recent quiz attempts.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Pie Chart for Quizzes per Subject
+        const quizPieCtx = document.getElementById('quizPieChart').getContext('2d');
+        const quizPieChart = new Chart(quizPieCtx, {
+            type: 'pie',
+            data: {
+                labels: {{ pie_chart_labels|tojson }},
+                datasets: [{
+                    data: {{ pie_chart_data|tojson }},
+                    backgroundColor: {{ chart_colors|tojson }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    }
+                }
+            }
+        });
+
+        // Bar Chart for Chapters per Subject
+        const chapterBarCtx = document.getElementById('chapterBarChart').getContext('2d');
+        const chapterBarChart = new Chart(chapterBarCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ bar_chart_labels|tojson }},
+                datasets: [{
+                    label: 'Number of Chapters',
+                    data: {{ bar_chart_data|tojson }},
+                    backgroundColor: {{ chart_colors|tojson }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</div>
+{% endblock %}

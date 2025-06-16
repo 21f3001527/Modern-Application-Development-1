@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Question{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Question</h2>
+
+    <form method="POST">
+        <div class="form-group">
+            <label for="question_text">Question</label>
+            <textarea id="question_text" name="question_text" class="form-control" required>{{ question.question_text }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="option_a">Option A</label>
+            <input type="text" id="option_a" name="option_a" class="form-control" value="{{ question.option_a }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="option_b">Option B</label>
+            <input type="text" id="option_b" name="option_b" class="form-control" value="{{ question.option_b }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="option_c">Option C</label>
+            <input type="text" id="option_c" name="option_c" class="form-control" value="{{ question.option_c }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="option_d">Option D</label>
+            <input type="text" id="option_d" name="option_d" class="form-control" value="{{ question.option_d }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="correct_option">Correct Option</label>
+            <select id="correct_option" name="correct_option" class="form-control" required>
+                <option value="A" {% if question.correct_option == 'A' %}selected{% endif %}>A</option>
+                <option value="B" {% if question.correct_option == 'B' %}selected{% endif %}>B</option>
+                <option value="C" {% if question.correct_option == 'C' %}selected{% endif %}>C</option>
+                <option value="D" {% if question.correct_option == 'D' %}selected{% endif %}>D</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3">Save Changes</button>
+        <a href="{{ url_for('admin_questions', quiz_id=question.quiz_id) }}" class="btn btn-secondary mt-3">Back</a>
+    </form>
+</div>
+{% endblock %}

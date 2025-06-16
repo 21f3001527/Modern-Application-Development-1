@@ -1,0 +1,53 @@
+-- take_quiz.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ quiz.title }}</h2>
+    <p>Chapter: {{ quiz.chapter.name }}</p>
+    <p>Subject: {{ quiz.chapter.subject.name }}</p>
+    <p>Duration: {{ quiz.time_duration }} minutes</p>
+    
+    <form method="POST" action="{{ url_for('take_quiz', quiz_id=quiz.id) }}">
+        {% for question in questions %}
+        <div class="card mb-3">
+            <div class="card-header">
+                Question {{ loop.index }}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ question.question_text }}</h5>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="option_a_{{ question.id }}" value="A" required>
+                    <label class="form-check-label" for="option_a_{{ question.id }}">
+                        A. {{ question.option_a }}
+                    </label>
+                </div>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="option_b_{{ question.id }}" value="B">
+                    <label class="form-check-label" for="option_b_{{ question.id }}">
+                        B. {{ question.option_b }}
+                    </label>
+                </div>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="option_c_{{ question.id }}" value="C">
+                    <label class="form-check-label" for="option_c_{{ question.id }}">
+                        C. {{ question.option_c }}
+                    </label>
+                </div>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="option_d_{{ question.id }}" value="D">
+                    <label class="form-check-label" for="option_d_{{ question.id }}">
+                        D. {{ question.option_d }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <button type="submit" class="btn btn-primary">Submit Quiz</button>
+    </form>
+</div>
+{% endblock %}

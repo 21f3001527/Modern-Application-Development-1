@@ -1,0 +1,44 @@
+
+<!-- user_register.html -->
+{% extends 'base.html' %}
+
+{% block title %}User Registration{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h2 class="text-center mb-4">User Registration</h2>
+    <form method="POST" action="{{ url_for('user_register') }}">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="mb-3">
+            <label for="fullname" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="fullname" name="fullname" required>
+        </div>
+        <div class="mb-3">
+            <label for="dob" class="form-label">Date of Birth</label>
+            <input type="date" class="form-control" id="dob" name="dob" required>
+        </div>
+        <div class="mb-3">
+            <label for="qualification" class="form-label">Qualification</label>
+            <input type="text" class="form-control" id="qualification" name="qualification" required>
+        </div>
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-success">Register</button>
+        </div>
+    </form>
+    <div class="text-center mt-3">
+        <p>Already have an account? <a href="{{ url_for('user_login') }}">Login</a></p>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,121 @@
+<!-- user_summary.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Your Learning Summary</h2>
+    <div class="mt-3">
+        <a href="{{ url_for('user_dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Total Quizzes Attempted:</strong> {{ total_quizzes }}</p>
+                    <p><strong>Average Score:</strong> {{ avg_score|round(2) }}%</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5>Recent Quiz Attempts</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_scores %}
+                    <ul class="list-group">
+                        {% for score in recent_scores %}
+                        <li class="list-group-item">
+                            {{ score.quiz.title }} - {{ score.total_scored|round(2) }}%
+                            <small class="text-muted d-block">{{ score.time_stamp_of_attempt.strftime('%d %B, %Y') }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No quiz attempts yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Performance by Subject</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="barChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5>Quiz Distribution by Subject</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="pieChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Bar Chart
+    var barCtx = document.getElementById('barChart').getContext('2d');
+    var barChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ bar_chart_labels|tojson }},
+            datasets: [{
+                label: 'Average Score (%)',
+                data: {{ bar_chart_data|tojson }},
+                backgroundColor: {{ chart_colors|tojson }},
+                borderColor: {{ chart_colors|tojson }},
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Average Score by Subject'
+                }
+            }
+        }
+    });
+    
+    // Pie Chart
+    var pieCtx = document.getElementById('pieChart').getContext('2d');
+    var pieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: {{ pie_chart_labels|tojson }},
+            datasets: [{
+                data: {{ pie_chart_data|tojson }},
+                backgroundColor: {{ chart_colors|tojson }},
+                borderColor: 'rgba(255, 255, 255, 0.7)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Quizzes Taken by Subject'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
+

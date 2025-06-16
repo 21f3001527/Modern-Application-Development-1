@@ -1,0 +1,21 @@
+<!-- templates/edit_chapter.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Chapter</h2>
+    
+    <form method="POST">
+        <div class="mb-3">
+            <label for="name" class="form-label">Chapter Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ chapter.name }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required>{{ chapter.description }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Update Chapter</button>
+        <a href="{{ url_for('admin_chapters', subject_id=chapter.subject_id) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

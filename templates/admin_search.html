@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Search Form -->
+    <div class="row mb-4">
+        <div class="col-md-8 mx-auto">
+            <form action="{{ url_for('admin_search') }}" method="GET" class="d-flex">
+                <input type="text" name="q" class="form-control me-2" 
+                       placeholder="Search for users, subjects, chapters, or quizzes..." 
+                       value="{{ request.args.get('q', '') }}">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Search Results -->
+    <div class="row">
+        <!-- Users Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Users</h5>
+                    <span class="badge bg-secondary">{{ users|length }}</span>
+                </div>
+                <div class="card-body">
+                    {% if users %}
+                        <ul class="list-group list-group-flush">
+                            {% for user in users %}
+                                <li class="list-group-item">
+                                    <h6 class="mb-0">{{ user.fullname }}</h6>
+                                    <small class="text-muted">ID: {{ user.id }}</small><br>
+                                    <small class="text-muted">Email: {{ user.email }}</small>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No users found</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Subjects Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Subjects</h5>
+                    <span class="badge bg-secondary">{{ subjects|length }}</span>
+                </div>
+                <div class="card-body">
+                    {% if subjects %}
+                        <ul class="list-group list-group-flush">
+                            {% for subject in subjects %}
+                                <li class="list-group-item">
+                                    <h6 class="mb-0">{{ subject.name }}</h6>
+                                    <small class="text-muted">ID: {{ subject.id }}</small>
+                                    <a href="/admin/chapters/{{ subject.id }}" class="btn btn-sm btn-info">View Chapters</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No subjects found</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapters Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Chapters</h5>
+                    <span class="badge bg-secondary">{{ chapters|length }}</span>
+                </div>
+                <div class="card-body">
+                    {% if chapters %}
+                        <ul class="list-group list-group-flush">
+                            {% for chapter in chapters %}
+                                <li class="list-group-item">
+                                    <h6 class="mb-0">{{ chapter.name }}</h6>
+                                    <small class="text-muted">ID: {{ chapter.id }}</small>
+                                    <a href="/admin/quizzes/{{ chapter.id }}" class="btn btn-sm btn-info">View Quizzes</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No chapters found</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+      
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Move the buttons to the top-left corner -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-start">
+                <a href="{{ url_for('user_profile') }}" class="btn btn-outline-primary me-2">Edit Profile</a>
+                <a href="{{ url_for('user_summary') }}" class="btn btn-outline-success">View Summary</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Welcome, {{ user.fullname }}!</h2>
+            <p>Your learning journey starts here.</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5>Available Quizzes</h5>
+                        <form action="{{ url_for('user_search') }}" method="GET" class="form-inline">
+                            <div class="input-group">
+                                <input type="text" name="q" class="form-control form-control-sm" placeholder="Search...">
+                                <button type="submit" class="btn btn-sm btn-primary">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="accordionQuizzes">
+                        {% if quizzes %}
+                            {% for quiz in quizzes %}
+                                <div class="card">
+                                    <div class="card-header" id="heading{{ quiz.id }}">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse{{ quiz.id }}" aria-expanded="true" aria-controls="collapse{{ quiz.id }}">
+                                                {{ quiz.title }}
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapse{{ quiz.id }}" class="collapse" aria-labelledby="heading{{ quiz.id }}" data-parent="#accordionQuizzes">
+                                        <div class="card-body">
+                                            <p><strong>Chapter:</strong> {{ quiz.chapter.name }}</p>
+                                            <p><strong>Subject:</strong> {{ quiz.chapter.subject.name }}</p>
+                                            <p><strong>Date:</strong> {{ quiz.date_of_quiz.strftime('%d %B, %Y') }}</p>
+                                            <p><strong>Duration:</strong> {{ quiz.time_duration }} minutes</p>
+                                            
+                                            {% set attempted = false %}
+                                            {% for score in scores %}
+                                                {% if score.quiz_id == quiz.id %}
+                                                    {% set attempted = true %}
+                                                    <div class="alert alert-info">
+                                                        You've attempted this quiz. Your score: {{ score.total_scored|round(2) }}%
+                                                        <a href="{{ url_for('quiz_results', score_id=score.id) }}" class="btn btn-sm btn-info">View Results</a>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                            
+                                            {% if not attempted %}
+                                                <a href="{{ url_for('take_quiz', quiz_id=quiz.id) }}" class="btn btn-primary">Take Quiz</a>
+                                            {% else %}
+                                                <a href="{{ url_for('take_quiz', quiz_id=quiz.id) }}" class="btn btn-secondary">Take Quiz Again</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No quizzes available at the moment.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Your Recent Quiz Attempts</h5>
+                </div>
+                <div class="card-body">
+                    {% if scores %}
+                        <ul class="list-group">
+                            {% for score in scores[:5] %}
+                                <li class="list-group-item">
+                                    <h6 class="mb-1">{{ score.quiz.title }}</h6>
+                                    <p class="mb-1">Score: {{ score.total_scored|round(2) }}%</p>
+                                    <small class="text-muted">{{ score.time_stamp_of_attempt.strftime('%d %B, %Y') }}</small>
+                                    <a href="{{ url_for('quiz_results', score_id=score.id) }}" class="btn btn-sm btn-info float-end">View</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {% if scores|length > 5 %}
+                            <div class="text-center mt-3">
+                                <a href="{{ url_for('user_summary') }}" class="btn btn-outline-primary btn-sm">View All Attempts</a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <p>You haven't attempted any quizzes yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

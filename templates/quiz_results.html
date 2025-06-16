@@ -1,0 +1,32 @@
+<!-- quiz_results.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2>Quiz Results</h2>
+        </div>
+        <div class="card-body">
+            <h3>{{ quiz.title }}</h3>
+            <p>Chapter: {{ quiz.chapter.name }}</p>
+            <p>Subject: {{ quiz.chapter.subject.name }}</p>
+            <p>Date Attempted: {{ score.time_stamp_of_attempt.strftime('%d %B, %Y at %H:%M') }}</p>
+            
+            <div class="alert {% if score.total_scored >= 70 %}alert-success{% elif score.total_scored >= 50 %}alert-warning{% else %}alert-danger{% endif %}">
+                <h4>Your Score: {{ score.total_scored|round(2) }}%</h4>
+                {% if score.total_scored >= 70 %}
+                    <p>Excellent job! You've mastered this quiz.</p>
+                {% elif score.total_scored >= 50 %}
+                    <p>Good effort! You've passed this quiz.</p>
+                {% else %}
+                    <p>You might need to review the material. Try again after studying!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        <a href="{{ url_for('user_dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}
